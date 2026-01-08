@@ -32,3 +32,44 @@ Exact list to be defined
 
 Because some proxies can truncate the URL if it is too long, you should provide an `fc` parameter that contains the number of filters included in the request. This helps the server to validate that all filters were received correctly. For example, if you have 3 filters, you would include `fc=3` in your request.
 If fc is not provided, the server will make the best effort to parse all filters, but there is a risk of missing some if the URL is truncated silently.
+
+
+### Usage
+
+This package exports several functionalities:
+
+1. `gql.ParseQuery()`
+
+```go
+ http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+        // Parse query string: /users?name[eq]=john&age[gt]=25&status[in]=active,pending
+        query, err := gql.ParseQuery(r.URL.Query())
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusBadRequest)
+            return
+        }
+        ...
+```
+Pass the query parameters as an argument and the engine will make its best effort to parse it
+(API might change during implementation)
+
+2. `query.ToSql()`
+
+```go
+sql, err := query.ToSQLWhere()
+sqlAlias, err := query.ToSqlWhereAlias(alias)
+```
+
+Once you get the query object, you can retrieve the SQL syntax calling `ToSql`
+in case that some keys don't map to the names in your collection, make sure to pass a map 
+of strings where the keys can be retrieved
+
+this function will return a section of a sql string
+
+```sql
+WHERE ....
+```
+
+or an error if it cannot find the key
+
+API might change during implementation
