@@ -1,5 +1,7 @@
 # grf
 
+< IN DEVELOPMENT : DO NOT USE YET>
+
 A Go query library for REST APIs that enables rich, type-safe filtering capabilities.
 
 ## Installation
